@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StockAnalysis.Managers;
+using YahooFinanceApi;
 
 namespace StockAnalysis.Controllers;
 
@@ -12,15 +14,20 @@ public class WeatherForecastController : ControllerBase
     };
 
     private readonly ILogger<WeatherForecastController> _logger;
+    private readonly IStockData _stockData;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+
+    public WeatherForecastController(ILogger<WeatherForecastController> logger, IStockData stockData)
     {
         _logger = logger;
+        _stockData = stockData;
     }
 
     [HttpGet]
-    public IEnumerable<WeatherForecast> Get()
+    public async Task<IEnumerable<WeatherForecast>> Get()
     {
+        (IReadOnlyList<Candle>? test1, string? test2) = await _stockData.GetStockData("AAPL", DateTime.Today.AddMonths(-15), DateTime.Today);
+
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
             Date = DateTime.Now.AddDays(index),

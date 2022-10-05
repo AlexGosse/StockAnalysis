@@ -1,8 +1,13 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using StockAnalysis.Managers;
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+
+// Dependency Injection
+builder.Services.AddScoped<IStockData, StockData>();
 
 var app = builder.Build();
 
@@ -26,3 +31,5 @@ app.MapFallbackToFile("index.html");;
 
 app.Run();
 
+
+Console.WriteLine("\n\n\n\nTEST");
