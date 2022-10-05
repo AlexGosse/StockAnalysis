@@ -31,5 +31,3 @@ app.MapFallbackToFile("index.html");;
 
 app.Run();
 
-
-Console.WriteLine("\n\n\n\nTEST");
