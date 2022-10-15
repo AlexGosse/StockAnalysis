@@ -26,7 +26,7 @@ public class WeatherForecastController : ControllerBase
     [HttpGet]
     public async Task<IEnumerable<WeatherForecast>> Get()
     {
-        (IReadOnlyList<Candle>? test1, string? test2) = await _stockData.GetStockData("AAPL", DateTime.Today.AddMonths(-15), DateTime.Today);
+        _stockData.GetStockData("AAPL", DateTime.Today.AddMonths(-15), DateTime.Today);
 
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
