@@ -8,13 +8,11 @@ namespace StockAnalysis.Controllers;
 [Route("[controller]")]
 public class StockDataController : ControllerBase
 {
-    private readonly ILogger<StockDataController> _logger;
     private readonly IStockData _stockData;
 
 
     public StockDataController(ILogger<StockDataController> logger, IStockData stockData)
     {
-        _logger = logger;
         _stockData = stockData;
     }
 
