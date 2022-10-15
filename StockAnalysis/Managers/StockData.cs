@@ -4,14 +4,11 @@ namespace StockAnalysis.Managers;
 
 public interface IStockData
 {
-    void GetStockData(string symbol1, DateTime startDate, DateTime endDate);
+    Task<List<YahooHistoricalPriceData>> GetStockData(string symbol, DateTime startDate, DateTime endDate);
 }
 
 public class StockData : IStockData
 {
-    public void GetStockData(string symbol, DateTime startDate, DateTime endDate)
-    {
-        var yahooPriceHistory = new YahooFinanceClient("B=YYYYYY", "XXXXXXX ").GetDailyHistoricalPriceData(symbol, startDate, endDate);
-    }
+    public async Task<List<YahooHistoricalPriceData>> GetStockData(string symbol, DateTime startDate, DateTime endDate) =>
+        await Task.Run(() => new YahooFinanceClient(string.Empty, string.Empty).GetDailyHistoricalPriceData(symbol, startDate, endDate));
 }
-
