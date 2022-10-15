@@ -16,10 +16,10 @@ public class StockDataController : ControllerBase
         _stockData = stockData;
     }
 
-    [HttpGet]
-    public async Task<IEnumerable<YahooHistoricalPriceData>> Get()
+    [HttpGet("{symbol}")]
+    public async Task<IEnumerable<YahooHistoricalPriceData>> Get(string symbol)
     {
-        return await _stockData.GetStockData("AAPL", DateTime.Today.AddMonths(-15), DateTime.Today);
+        return await _stockData.GetStockData(symbol, DateTime.Today.AddMonths(-15), DateTime.Today);
     }
 }
 
