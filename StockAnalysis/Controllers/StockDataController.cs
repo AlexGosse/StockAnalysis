@@ -10,7 +10,6 @@ public class StockDataController : ControllerBase
 {
     private readonly IStockData _stockData;
 
-
     public StockDataController(ILogger<StockDataController> logger, IStockData stockData)
     {
         _stockData = stockData;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 export class FetchData extends Component {
   static displayName = FetchData.name;
@@ -9,12 +9,12 @@ export class FetchData extends Component {
   }
 
   componentDidMount() {
-    this.populateWeatherData();
+    this.fetchStockData();
   }
 
   static renderForecastsTable(forecasts) {
     return (
-      <table className='table table-striped' aria-labelledby="tabelLabel">
+      <table className="table table-striped" aria-labelledby="tabelLabel">
         <thead>
           <tr>
             <th>Date</th>
@@ -24,35 +24,39 @@ export class FetchData extends Component {
           </tr>
         </thead>
         <tbody>
-          {forecasts.map(forecast =>
+          {forecasts.map((forecast) => (
             <tr key={forecast.date}>
               <td>{forecast.date}</td>
               <td>{forecast.high}</td>
               <td>{forecast.low}</td>
               <td>{forecast.close}</td>
             </tr>
-          )}
+          ))}
         </tbody>
       </table>
     );
   }
 
   render() {
-    let contents = this.state.loading
-      ? <p><em>Loading...</em></p>
-      : FetchData.renderForecastsTable(this.state.forecasts);
+    let contents = this.state.loading ? (
+      <p>
+        <em>Loading...</em>
+      </p>
+    ) : (
+      FetchData.renderForecastsTable(this.state.forecasts)
+    );
 
     return (
       <div>
-        <h1 id="tabelLabel" >Stock Data</h1>
+        <h1 id="tabelLabel">Stock Data</h1>
         <p>Stock data</p>
         {contents}
       </div>
     );
   }
 
-  async populateWeatherData() {
-    const response = await fetch('stockdata/AAPL');
+  async fetchStockData() {
+    const response = await fetch("stockdata/AAPL");
     const data = await response.json();
     this.setState({ forecasts: data, loading: false });
   }
