@@ -17,14 +17,8 @@ app.MapGet("/stockdata",
     async ([FromServices] IStockData stockData, [FromQuery] string symbol, DateTime? start, DateTime? end) =>
     await stockData.GetStockData(symbol, start, end));
 
+app.MapGet("/backtest",
+    async ([FromServices] IStockData stockData, [FromBody] BacktestInstructions backtestInstructions) =>
+    await stockData.BacktestStock(backtestInstructions));
+
 app.Run();
-
-// Simple Moving Average
-
-// Close Price
-
-// Drawdown
-
-//Is Above
-
-//Is Below

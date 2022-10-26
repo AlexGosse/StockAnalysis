@@ -53,9 +53,6 @@ public class StockData : IStockData
         return null;
     }
 
-    private List<int> SimpleMovingAverage(int days, List<YahooHistoricalPriceData> data)
-    {
-        return null;
-    }
-
+    private decimal SimpleMovingAverage(DateTime startDate, DateTime endDate, List<YahooHistoricalPriceData> data) =>
+        data.Where(x => startDate <= x.Date && x.Date <= endDate).Average(x => x.Close);
 }
