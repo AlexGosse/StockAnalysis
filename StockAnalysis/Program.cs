@@ -14,7 +14,17 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.MapGet("/stockdata",
-    async ([FromServices]IStockData stockData, [FromQuery]string symbol, DateTime start, DateTime end) =>
+    async ([FromServices] IStockData stockData, [FromQuery] string symbol, DateTime? start, DateTime? end) =>
     await stockData.GetStockData(symbol, start, end));
 
 app.Run();
+
+// Simple Moving Average
+
+// Close Price
+
+// Drawdown
+
+//Is Above
+
+//Is Below

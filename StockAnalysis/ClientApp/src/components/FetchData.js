@@ -56,7 +56,7 @@ export class FetchData extends Component {
   }
 
   async fetchStockData() {
-    const response = await fetch("stockdata/AAPL");
+    const response = await fetch("stockdata?symbol=AAPL");
     const data = await response.json();
     this.setState({ forecasts: data, loading: false });
   }

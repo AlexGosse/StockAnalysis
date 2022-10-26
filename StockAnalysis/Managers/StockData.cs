@@ -18,18 +18,22 @@ public class StockData : IStockData
         this.cache = cache;
     }
 
-    public async Task<List<YahooHistoricalPriceData>> GetStockData(string symbol, DateTime? startDate, DateTime? endDate) =>
-        await cache.GetOrCreateAsync((symbol, startDate, endDate), async cacheEntry =>
+    public async Task<List<YahooHistoricalPriceData>> GetStockData(string symbol, DateTime? startDate, DateTime? endDate)
+    {
+        startDate ??= DateTime.Today.AddYears(-20);
+        endDate ??= DateTime.Today;
+        return await cache.GetOrCreateAsync((symbol, startDate, endDate), async cacheEntry =>
         {
             cacheEntry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
             return await Task.Run(() =>
                 new YahooFinanceClient(string.Empty, string.Empty).GetDailyHistoricalPriceData(symbol, startDate, endDate));
         });
+    }
     
 
     public async Task<List<decimal>?> BacktestStock(BacktestInstructions instructions)
     {
-        var stockData = await GetStockData(instructions.Ticker ?? string.Empty, instructions.StartDate, instructions.EndDate);
+        var stockData = await GetStockData(instructions.Ticker, instructions.StartDate, instructions.EndDate);
         
         if(stockData is null)
         {
