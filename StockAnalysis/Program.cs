@@ -1,23 +1,20 @@
-﻿using StockAnalysis.Managers;
+﻿using Microsoft.AspNetCore.Mvc;
+using StockAnalysis.Managers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Dependency Injection
 builder.Services.AddScoped<IStockData, StockData>();
 
 var app = builder.Build();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseRouting();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller}/{action=Index}/{id?}");
-
-app.MapFallbackToFile("index.html");;
+app.MapGet("/stockdata",
+    async ([FromServices]IStockData stockData, [FromQuery]string symbol, DateTime start, DateTime end) =>
+    await stockData.GetStockData(symbol, start, end));
 
 app.Run();

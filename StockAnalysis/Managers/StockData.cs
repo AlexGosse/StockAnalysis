@@ -11,7 +11,7 @@ public interface IStockData
 
 public class StockData : IStockData
 {
-    private IMemoryCache cache;
+    private readonly IMemoryCache cache;
 
     public StockData(IMemoryCache cache)
     {
