@@ -22,6 +22,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="6.0.9" />
     <PackageReference Include="YahooFinance.NET" Version="4.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +32,7 @@
     <None Remove="YahooFinanceApi" />
     <None Remove="Managers\" />
     <None Remove="YahooFinance.NET" />
+    <None Remove="Newtonsoft.Json" />
   </ItemGroup>
 
   <ItemGroup>

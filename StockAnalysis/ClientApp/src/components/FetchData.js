@@ -10,6 +10,7 @@ export class FetchData extends Component {
 
   componentDidMount() {
     this.fetchStockData();
+    this.fetchBacktestData();
   }
 
   static renderForecastsTable(forecasts) {
@@ -59,5 +60,36 @@ export class FetchData extends Component {
     const response = await fetch("stockdata?symbol=AAPL");
     const data = await response.json();
     this.setState({ forecasts: data, loading: false });
+  }
+
+  async fetchBacktestData() {
+    let backtestInstructions = `{
+      "$type": "StockAnalysis.Managers.BacktestInstructions, StockAnalysis",
+      "BuyWhen": [{
+        "$type": "StockAnalysis.Managers.SimpleMovingAverage, StockAnalysis",
+        "days": 4,
+        "isAbove": true,
+        "isAnd": false
+      },
+      {
+        "$type": "StockAnalysis.Managers.ClosePrice, StockAnalysis",
+        "price": 4.1,
+        "isAbove": true,
+        "isAnd": false
+      }
+      ],
+      "StartDate": null,
+      "EndDate": null,
+      "Ticker": "NYSE",
+      "NumShares": 100
+    }`;
+
+    const response = await fetch("backtest", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(backtestInstructions),
+    });
   }
 }

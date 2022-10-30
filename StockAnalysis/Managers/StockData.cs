@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using System.Text.Json.Serialization;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 using YahooFinance.NET;
 
 namespace StockAnalysis.Managers;
@@ -6,16 +8,18 @@ namespace StockAnalysis.Managers;
 public interface IStockData
 {
     Task<List<YahooHistoricalPriceData>> GetStockData(string symbol, DateTime? startDate, DateTime? endDate);
-    Task<List<decimal>?> BacktestStock(BacktestInstructions instructions);
+    Task<List<decimal>?> BacktestStock(string instructions);
 }
 
 public class StockData : IStockData
 {
     private readonly IMemoryCache cache;
+    private JsonSerializerSettings jsonSerializerSettings;
 
     public StockData(IMemoryCache cache)
     {
         this.cache = cache;
+        jsonSerializerSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
     }
 
     public async Task<List<YahooHistoricalPriceData>> GetStockData(string symbol, DateTime? startDate, DateTime? endDate)
@@ -29,13 +33,19 @@ public class StockData : IStockData
                 new YahooFinanceClient(string.Empty, string.Empty).GetDailyHistoricalPriceData(symbol, startDate, endDate));
         });
     }
-    
 
-    public async Task<List<decimal>?> BacktestStock(BacktestInstructions instructions)
+    public async Task<List<decimal>?> BacktestStock(string instructionString)
     {
-        var stockData = await GetStockData(instructions.Ticker, instructions.StartDate, instructions.EndDate);
+        var instructions = JsonConvert.DeserializeObject<BacktestInstructions>(instructionString, jsonSerializerSettings);
+
+        if(instructions is null)
+        {
+            return null;
+        }
         
-        if(stockData is null)
+        var stockData = await GetStockData(instructions?.Ticker, instructions.StartDate, instructions.EndDate);
+
+        if (stockData is null)
         {
             return null;
         }
@@ -45,7 +55,7 @@ public class StockData : IStockData
             stockData.First().Close * instructions.NumShares
         };
 
-        foreach(var stock in stockData)
+        foreach (var stock in stockData)
         {
             //var sell = instructions
         }
